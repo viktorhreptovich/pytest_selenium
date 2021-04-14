@@ -1,5 +1,8 @@
+import time
+
 import pytest
 
+from pages.login_page import LoginPage
 from pages.product_page import ProductPage
 
 
@@ -17,7 +20,7 @@ from pages.product_page import ProductPage
                                   ),
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
-def test_guest_can_go_to_login_page(browser, link):
+def test_guest_can_add_product_to_basket(browser, link):
     product_page = ProductPage(browser, link)
     product_page.open()
     product_page.should_be_add_to_basket_button()
@@ -76,3 +79,34 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page = product_page.go_to_basket_page()
     basket_page.should_not_have_products()
     basket_page.should_be_message_empty_basket()
+
+
+@pytest.mark.register_user
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        email = str(time.time()) + "@autofakemail.org"
+        password = str(time.time()) + "auto"
+        link = 'http://selenium1py.pythonanywhere.com/accounts/login/'
+        login_page = LoginPage(browser, link)
+        login_page.open()
+        login_page.register_new_user(email, password)
+        login_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207'
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        product_page.should_not_be_message_product_has_been_added()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0'
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        product_page.should_be_add_to_basket_button()
+        product_page.add_to_basket()
+        product_page.solve_quiz_and_get_code()
+        product_name = product_page.get_product_name()
+        product_page.should_be_message_product_has_been_added(product_name)
+        product_price = product_page.get_product_price()
+        product_page.should_be_message_total_basket(product_price)
