@@ -36,6 +36,14 @@ class ProductPage(BasePage):
             *ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED_PRODUCT_NAME).text
         assert product_name_in_message == product_name, f'Expected: {product_name}, actual: {product_name_in_message}'
 
+    def should_not_be_message_product_has_been_added(self):
+        assert self.is_not_element_present(*ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED), \
+            'Message "Product has been added to basket" is presented'
+
+    def should_disappeared_message_product_has_been_added(self):
+        assert self.is_disappeared(*ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED), \
+            'Message "Product has been added to basket" is not disappeared'
+
     def should_be_message_total_basket(self, product_price):
         assert self.is_element_present(*ProductPageLocators.MESSAGE_BASKET_TOTAL), \
             'Message "Basket total" is not presented'
