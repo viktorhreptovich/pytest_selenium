@@ -34,7 +34,8 @@ class ProductPage(BasePage):
             'Message "Product has been added to basket" is not presented'
         product_name_in_message = self.browser.find_element(
             *ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED_PRODUCT_NAME).text
-        assert product_name_in_message == product_name, f'Expected: {product_name}, actual: {product_name_in_message}'
+        assert product_name_in_message == product_name, \
+            f'Expected product name in success message: {product_name}, actual: {product_name_in_message}'
 
     def should_not_be_message_product_has_been_added(self):
         assert self.is_not_element_present(*ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED), \
@@ -48,4 +49,5 @@ class ProductPage(BasePage):
         assert self.is_element_present(*ProductPageLocators.MESSAGE_BASKET_TOTAL), \
             'Message "Basket total" is not presented'
         price_in_message = self.browser.find_element(*ProductPageLocators.MESSAGE_BASKET_TOTAL_PRICE).text
-        assert price_in_message == product_price, f'Expected: {product_price}, actual: {price_in_message}'
+        assert price_in_message == product_price, \
+            f'Expected basket total: {product_price}, actual: {price_in_message}'

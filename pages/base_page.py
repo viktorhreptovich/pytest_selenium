@@ -41,7 +41,6 @@ class BasePage:
             )
         except TimeoutException:
             return False
-
         return True
 
     def solve_quiz_and_get_code(self):
@@ -65,7 +64,8 @@ class BasePage:
         return LoginPage(self.browser, self.browser.current_url)
 
     def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), \
+            "Login link is not presented"
 
     def go_to_basket_page(self):
         basket_button = self.browser.find_element(*BasePageLocators.BASKET_BUTTON)
