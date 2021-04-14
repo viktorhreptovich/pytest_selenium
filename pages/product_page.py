@@ -1,7 +1,3 @@
-import re
-
-from selenium.webdriver.common.by import By
-
 from pages.base_page import BasePage
 from pages.locators import ProductPageLocators
 
@@ -36,13 +32,12 @@ class ProductPage(BasePage):
     def should_be_message_product_has_been_added(self, product_name):
         assert self.is_element_present(*ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED), \
             'Message "Product has been added to basket" is not presented'
-        message = self.browser.find_element(*ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED).text
-        assert product_name in message, \
-            f'Message "{message}" doesn\'t contain product name "{product_name}"'
+        product_name_in_message = self.browser.find_element(
+            *ProductPageLocators.MESSAGE_PRODUCT_HAS_BEEN_ADDED_PRODUCT_NAME).text
+        assert product_name_in_message == product_name, f'Expected: {product_name}, actual: {product_name_in_message}'
 
     def should_be_message_total_basket(self, product_price):
         assert self.is_element_present(*ProductPageLocators.MESSAGE_BASKET_TOTAL), \
             'Message "Basket total" is not presented'
-        message = self.browser.find_element(*ProductPageLocators.MESSAGE_BASKET_TOTAL).text
-        assert product_price in message, \
-            f'Message "{message}" doesn\'t contain product name "{product_price}"'
+        price_in_message = self.browser.find_element(*ProductPageLocators.MESSAGE_BASKET_TOTAL_PRICE).text
+        assert price_in_message == product_price, f'Expected: {product_price}, actual: {price_in_message}'
